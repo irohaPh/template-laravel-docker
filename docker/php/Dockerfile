@@ -50,3 +50,5 @@ RUN curl -sL https://deb.nodesource.com/setup_11.x | bash - \
 
 # exec時のカレントディレクトリを指定
 WORKDIR /work
+
+EXPOSE 9000
