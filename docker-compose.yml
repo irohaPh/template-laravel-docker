@@ -23,12 +23,33 @@ services:
     image: mysql:5.7
     container_name: "laravel-mysql"
     environment:
-      MYSQL_DATABASE: root
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+      TZ: "Asia/Tokyo"
     ports:
       - 13306:3306
     volumes:
       - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      - ./docker/mysql/conf/master.cnf:/etc/mysql/conf.d/my.cnf
+
+  mysql-slave:
+    image: mysql:5.7
+    container_name: "laravel-mysql-slave"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+      TZ: "Asia/Tokyo"
+    ports:
+      - 13307:3306
+    depends_on:
+      - mysql
+    volumes:
+      - ./docker/mysql/conf/slave.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/mysql/shell/start-slave.sh:/docker-entrypoint-initdb.d/start-slave.sh
 
   postgres:
     image: postgres:alpine
