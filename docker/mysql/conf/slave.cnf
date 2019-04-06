@@ -2,9 +2,101 @@
 character-set-server=utf8mb4
 collation-server=utf8mb4_general_ci
 
-# replicate-do-db=特定のDBだけレプリケーションしたい場合は指定する
+# #################
+# innodb
+# #################
 
-log-bin=/var/log/mysql/bin-log
+# InnoDBのデータとインデックスをキャッシュするバッファのサイズ(推奨は物理メモリの8割)
+innodb_buffer_pool_size=1G
+
+# コミットされていないトランザクションのためのバッファのサイズ
+innodb_log_buffer_size=64M
+
+# InnoDBの更新ログを記録するディスク上のファイルサイズ(innodb_buffer_pool_size の4分の1程度)
+innodb_log_file_size=256M
+
+# データやインデックスを共有ではなくテーブル個別に保存する
+innodb_file_per_table=1
+
+# #################
+# query cache
+# #################
+
+# クエリキャッシュ最大サイズ
+query_cache_limit=16M
+
+# クエリキャッシュで使用するメモリサイズ
+query_cache_size=256M
+
+# クエリキャッシュのタイプ(0:off, 1:ON SELECT SQL_NO_CACHE以外, 2:DEMAND SELECT SQL_CACHEのみ)
+query_cache_type=ON
+
+# #################
+# slow query log
+# #################
+
+# 出力設定
+slow_query_log=ON
+
+# スロークエリと判定する秒数
+long_query_time=3
+
+# スロークエリログの場所
+slow_query_log_file=/var/log/mysql/slow.log
+
+# #################
+# etc
+# #################
+
+# インデックス未使用でのJOIN時に使用するバッファ
+join_buffer_size=256K
+
+# クライアントからサーバーに送信できるパケットの最大長
+max_allowed_packet=8M
+
+# フルスキャンのレコードバッファ
+read_buffer_size=1M
+
+# キーを使用したソートで読み込まれた行がキャッシュされるバッファ
+read_rnd_buffer_size=2M
+
+# ソート時に使用されるバッファ
+sort_buffer_size=4M
+
+# MEMORYテーブルの最大サイズ。このサイズを超えたMEMORYテーブルはディスク上に作成
+max_heap_table_size=16M
+
+# スレッド毎に作成される一時的なテーブルの最大サイズ。スレッドバッファ
+tmp_table_size=16M
+
+# スレッドキャッシュ保持最大数
+thread_cache_size=100
+
+# コネクションタイムアウト時間
+wait_timeout=30
+
+# #################
+# Replication (Master, Slave)
+# #################
+
+# レプリケーションを行うサーバのユニークID（マスタ、スレーブで別々のものを指定）
 server-id=2
 
-read_only=1
+# スレーブに通知するバイナリログ
+log-bin=/var/log/mysql/bin-log
+
+# バイナリログファイルのローテート日数
+expire_logs_days=1
+
+# 特定のデータベースのみをレプリケーションしたい場合は、replicate-do-dbを指定する
+#replicate-do-db=db_name
+
+# #################
+# Replication (Slave Only)
+# #################
+
+# 一般ユーザからの更新を禁止
+read_only=ON
+
+# スレーブでもバイナリログを出力させ、マスタDown時にスレーブをマスタに昇格させる
+log-slave-updates
