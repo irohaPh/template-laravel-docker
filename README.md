@@ -23,26 +23,28 @@ $ docker-compose build --no-cache
 $ docker-compose exec php laravel new [プロジェクト名]
 ```
 
-## DB接続設定(MySQLを使う場合)
-`/work/[プロジェクト名]/.env` を以下のように修正する
-```:.env
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-DB_DATABASE=laravel_db
-DB_USERNAME=laravel
-DB_PASSWORD=laravel
-```
+## DB接続設定
+`./work/[プロジェクト名]/.env` と `./work/[プロジェクト名]/config/database.php` を修正  
+修正箇所は `./work/laravel_settings.example` 配下のファイルを参考に 
 
-## Artisanコマンド等の実行
-```sh:例)Laravelのバージョンを確認
+## Artisanコマンドの実行
+```sh:Laravelのバージョンを確認
 $ docker-compose exec php php [プロジェクト名]/artisan -V
+```
+```sh:マイグレーション
+$ docker-compose exec php php [プロジェクト名]/artisan migrate
+```
+```sh:マイグレーションのロールバック
+$ docker-compose exec php php [プロジェクト名]/artisan migrate:rollback
 ```
 
 # nginx
 ## 任意のLaravelプロジェクトをドキュメントルートに指定したい場合
-1. `./docker/nginx/default.conf` の `server.root` を、 `/work/[Laravelプロジェクト名]/public` などに変更する
+1. `./docker/nginx/default.conf` の `server.root` を、 `./work/[Laravelプロジェクト名]/public` などに変更する
 2. nginxを再起動する
 ```sh
 $ docker-compose exec nginx nginx -s reload
 ```
+
+# ブラウザからの確認
+`http://localhost:8080/` へアクセス

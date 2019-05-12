@@ -19,9 +19,9 @@ services:
       # コンテナ側のディレクトリ名は、nginx側と揃ってないと動かない
       - ./work:/work
 
-  mysql:
+  mysql-master:
     image: mysql:5.7
-    container_name: "laravel-mysql"
+    container_name: "laravel-mysql-master"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: laravel_db
@@ -46,19 +46,19 @@ services:
     ports:
       - 13307:3306
     depends_on:
-      - mysql
+      - mysql-master
     volumes:
       - ./docker/mysql/conf/slave.cnf:/etc/mysql/conf.d/my.cnf
       - ./docker/mysql/shell/start-slave.sh:/docker-entrypoint-initdb.d/start-slave.sh
 
-  postgres:
-    image: postgres:alpine
-    container_name: "laravel-postgres"
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-    ports:
-      - 15432:5432
+  # postgres:
+  #   image: postgres:alpine
+  #   container_name: "laravel-postgres"
+  #   environment:
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: root
+  #   ports:
+  #     - 15432:5432
 
   redis:
     image: redis:alpine
