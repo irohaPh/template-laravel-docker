@@ -18,6 +18,8 @@ services:
     volumes:
       # コンテナ側のディレクトリ名は、nginx側と揃ってないと動かない
       - ./work:/work
+      # 各種設定ファイル
+      - ./docker/php/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
 
   mysql-master:
     image: mysql:5.7
