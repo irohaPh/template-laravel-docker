@@ -1,3 +1,4 @@
 work/*
 !work/public
 !work/nginx/logs/.gitkeep
+!work/laravel_settings.example
