@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'default'),
 
     /*
     |--------------------------------------------------------------------------
@@ -72,6 +72,9 @@ return [
         |--------------------------------------------------------------------------
         |
         | 強制的にMasterを使用したい場合は、こちらのconnectionを使う
+        | ※defaultのconnectionとは別のものを使うことになるので、
+        |  Transaction内で同じconnectionを使うように意識しないと罠にハマるので注意
+        |  connectionの切り替えは、DB::connection()を使ったり、Modelの$connectionを変更することで可能
         */
 
         'master' => [
