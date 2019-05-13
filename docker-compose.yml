@@ -1,4 +1,14 @@
-version: '3'
+version: '3.4'
+
+# mysqlの共通設定
+x-template: &mysql-template
+  image: mysql:5.7
+  environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+      TZ: "Asia/Tokyo"
 
 services:
   nginx:
@@ -22,14 +32,8 @@ services:
       - ./docker/php/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
 
   mysql-master:
-    image: mysql:5.7
+    <<: *mysql-template
     container_name: "laravel-mysql-master"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: laravel_db
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: laravel
-      TZ: "Asia/Tokyo"
     ports:
       - 13306:3306
     volumes:
@@ -40,14 +44,8 @@ services:
       - ./work/.docker/mysql/master/log:/var/log/mysql:cached
 
   mysql-slave:
-    image: mysql:5.7
+    <<: *mysql-template
     container_name: "laravel-mysql-slave"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: laravel_db
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: laravel
-      TZ: "Asia/Tokyo"
     ports:
       - 13307:3306
     depends_on:
