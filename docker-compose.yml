@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./work:/work
+      - ./work:/work:cached
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
 
   php:
@@ -17,7 +17,7 @@ services:
     container_name: "laravel-php"
     volumes:
       # コンテナ側のディレクトリ名は、nginx側と揃ってないと動かない
-      - ./work:/work
+      - ./work:/work:cached
       # 各種設定ファイル
       - ./docker/php/xdebug/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
 
@@ -35,6 +35,9 @@ services:
     volumes:
       - ./docker/mysql/init:/docker-entrypoint-initdb.d
       - ./docker/mysql/conf/master.cnf:/etc/mysql/conf.d/my.cnf
+      # 永続化をしたくない場合はコメントアウト
+      - ./work/.docker/mysql/master/data:/var/lib/mysql:cached
+      - ./work/.docker/mysql/master/log:/var/log/mysql:cached
 
   mysql-slave:
     image: mysql:5.7
@@ -52,6 +55,8 @@ services:
     volumes:
       - ./docker/mysql/conf/slave.cnf:/etc/mysql/conf.d/my.cnf
       - ./docker/mysql/shell/start-slave.sh:/docker-entrypoint-initdb.d/start-slave.sh
+      # レプリケーション設定がおかしくなってしまうので、Slaveの/var/lib/mysqlは永続化しない
+      - ./work/.docker/mysql/slave/log:/var/log/mysql:cached
 
   # postgres:
   #   image: postgres:alpine
@@ -67,3 +72,7 @@ services:
     container_name: "laravel-redis"
     ports:
       - 16379:6379
+    # 永続化をしたくない場合はコメントアウト
+    command: redis-server --appendonly yes
+    volumes:
+      - ./work/.docker/redis/data:/data:cached

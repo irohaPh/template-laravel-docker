@@ -1,4 +1,6 @@
 work/*
-!work/public
-!work/nginx/logs/.gitkeep
+!work/.docker/mysql/.gitkeep
+!work/.docker/nginx/logs/.gitkeep
+!work/.docker/redis/.gitkeep
 !work/laravel_settings.example
+!work/public
