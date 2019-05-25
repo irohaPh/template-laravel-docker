@@ -7,13 +7,13 @@ collation-server=utf8mb4_general_ci
 # #################
 
 # InnoDBのデータとインデックスをキャッシュするバッファのサイズ(推奨は物理メモリの8割)
-innodb_buffer_pool_size=1G
+innodb_buffer_pool_size=512M
 
 # コミットされていないトランザクションのためのバッファのサイズ
 innodb_log_buffer_size=64M
 
-# InnoDBの更新ログを記録するディスク上のファイルサイズ(innodb_buffer_pool_size の4分の1程度)
-innodb_log_file_size=256M
+# InnoDBの更新ログを記録するディスク上のファイルサイズ(innodb_buffer_pool_size の4分の1程度 ※基本は 1M以上、4G未満(MySQL5.5公式))
+innodb_log_file_size=128M
 
 # データやインデックスを共有ではなくテーブル個別に保存する
 innodb_file_per_table=1
@@ -23,10 +23,10 @@ innodb_file_per_table=1
 # #################
 
 # クエリキャッシュ最大サイズ
-query_cache_limit=16M
+query_cache_limit=8M
 
 # クエリキャッシュで使用するメモリサイズ
-query_cache_size=256M
+query_cache_size=64M
 
 # クエリキャッシュのタイプ(0:off, 1:ON SELECT SQL_NO_CACHE以外, 2:DEMAND SELECT SQL_CACHEのみ)
 query_cache_type=ON
